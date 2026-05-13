@@ -98,6 +98,37 @@ ipython_config.py
 #   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
+# ML Project Specific
+data/raw/
+data/processed/
+outputs/figures/
+outputs/tables/
+outputs/models/
+logs/# ML Project Specific
+data/raw/
+data/processed/
+outputs/figures/
+outputs/tables/
+outputs/models/
+# =====================
+# ML Project Specific
+# =====================
+
+# Raw data (large files, should not be in Git)
+data/raw/
+data/processed/
+
+# Generated outputs (figures, tables, models)
+outputs/figures/
+outputs/tables/
+outputs/models/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
 # uv.lock
 
 # poetry
