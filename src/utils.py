@@ -20,3 +20,13 @@ def set_seed(seed: int = 42):
             torch.cuda.manual_seed_all(seed)
     except ImportError:
         pass
+
+
+def ensure_dir(path) -> None:
+    """
+    确保目录存在（递归创建）。被 Preprocessor/Trainer/Evaluator 等共享使用。
+    放在 utils 里避免各处重复 mkdir(parents=True, exist_ok=True)。
+    C 负责维护此工具函数。
+    """
+    from pathlib import Path
+    Path(path).mkdir(parents=True, exist_ok=True)

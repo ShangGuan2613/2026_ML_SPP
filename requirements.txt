@@ -1,0 +1,21 @@
+# 2026_ML_SPP - Student Performance Prediction
+# Core data & ML
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+joblib>=1.3
+
+# Visualization (used in notebooks 01-04)
+matplotlib>=3.7
+seaborn>=0.12
+
+# Testing
+pytest>=7.0
+
+# Optional but recommended for notebooks / dev
+jupyter>=1.0
+ipykernel>=6.0
+# ipywidgets for interactive if needed
+
+# Note: This env also used torch in utils.set_seed (optional import)
+# torch>=2.0  # uncomment if PyTorch is used in the project
