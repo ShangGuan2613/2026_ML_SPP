@@ -48,57 +48,10 @@ coverage.xml
 *.cover
 *.py.cover
 .hypothesis/
-.pytest_cache/
-cover/
 
-# Translations
-*.mo
-*.pot
+# Node / JS generators (for report generation scripts)
+node_modules/
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-.pybuilder/
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-# Pipfile.lock
-
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-# =====================
 # ML Project Specific (2026_ML_SPP student performance prediction)
 # =====================
 # Raw data (large files, do not commit the actual CSVs; keep dir structure + docs via exceptions)
@@ -147,7 +100,7 @@ Thumbs.db
 .pdm-build/
 
 # pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
+#   Similar to Pixi.lock, it is generally recommended to include pixi.lock in version control.
 # pixi.lock
 #   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
 #   in the .venv directory. It is recommended not to include this directory in version control.
@@ -226,8 +179,7 @@ cython_debug/
 # Visual Studio Code
 #   Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
 #   that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#   and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#   you could uncomment the following to ignore the entire vscode folder
+#   and can be added to the global gitignore or merged into this file. However, if you prefer, you could uncomment the following to ignore the entire vscode folder
 # .vscode/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+      2026_ML_SPP Apple Keynote Style Presentation
+      For 2026-06-10 final project demo @ N528
+      Open in browser (full screen recommended).
+      Keyboard: →/space = next, ← = prev, F = fullscreen, D = jump to interactive demo, Esc = exit.
+      Companion files:
+        - report/5分钟演讲稿_配HTML_Keynote.md (script)
+        - report/story.md (playbook)
+        - report/项目穿透文档.md (full implementation history)
+      Generated as part of project deliverables. Ready for GitHub.
+    -->
+    <title>2026_ML_SPP · 学生成绩预测与早期预警</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=SF+Pro+Display:wght@400;500;600&amp;display=swap');
+        
+        :root {
+            --apple-blue: #0071e3;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .apple-font {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-feature-settings: "tnum";
+        }
+
+        .keynote-bg {
+            background: #000000;
+            color: #f5f5f7;
+        }
+
+        .slide {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-headline {
+            font-size: clamp(3.5rem, 8vw, 7.5rem);
+            line-height: 0.92;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            max-width: 18ch;
+        }
+
+        .section-headline {
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            line-height: 0.95;
+            font-weight: 700;
+            letter-spacing: -0.035em;
+        }
+
+        .big-stat {
+            font-size: clamp(5rem, 12vw, 9rem);
+            line-height: 0.85;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+        }
+
+        .subhead {
+            font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+            font-weight: 400;
+            color: #86868b;
+            max-width: 32ch;
+            line-height: 1.2;
+        }
+
+        .apple-text {
+            color: #f5f5f7;
+        }
+
+        .apple-gray {
+            color: #86868b;
+        }
+
+        .key-stat {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding: 1.25rem 2rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .slide-content {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .big-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .feature-bar {
+            height: 10px;
+            background: linear-gradient(to right, #0071e3, #40a0ff);
+            border-radius: 9999px;
+            transition: width 1.2s cubic-bezier(0.23, 1.0, 0.32, 1);
+        }
+
+        .minimal-card {
+            background: #1c1c1e;
+            border: 1px solid #3a3a3c;
+            transition: all 0.2s cubic-bezier(0.23, 1.0, 0.32, 1);
+        }
+
+        .minimal-card:hover {
+            border-color: #0071e3;
+            transform: translateY(-2px);
+        }
+
+        .keynote-button {
+            background: #0071e3;
+            color: white;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 9999px;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .keynote-button:hover {
+            background: #0077ed;
+            transform: scale(1.02);
+        }
+
+        .keynote-button.secondary {
+            background: transparent;
+            border: 1px solid #3a3a3c;
+            color: #f5f5f7;
+        }
+
+        .keynote-button.secondary:hover {
+            background: #2c2c2e;
+        }
+
+        .insight-text {
+            font-size: 1.65rem;
+            line-height: 1.25;
+            max-width: 28ch;
+            font-weight: 500;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 0.875rem;
+            color: #86868b;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .apple-divider {
+            width: 60px;
+            height: 1px;
+            background: #3a3a3c;
+            margin: 2rem auto;
+        }
+
+        .metric {
+            font-size: 3.8rem;
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+        }
+
+        .section-label {
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #0071e3;
+        }
+
+        .demo-output {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: #111113;
+            border: 1px solid #2c2c2e;
+        }
+
+        .presentation-mode {
+            cursor: none;
+        }
+
+        .no-cursor {
+            cursor: none;
+        }
+        
+        .stat-value {
+            font-size: clamp(4.5rem, 9vw, 7.2rem);
+            font-weight: 700;
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+        }
+    </style>
+</head>
+<body class="keynote-bg apple-font overflow-hidden">
+    <!-- Top Navigation -->
+    <div class="nav flex items-center justify-between text-sm">
+        <div class="flex items-center gap-x-3">
+            <div class="flex items-center gap-x-2">
+                <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                    <span class="text-black font-bold text-xl tracking-tighter">S</span>
+                </div>
+                <span class="font-semibold tracking-tight text-lg">2026_ML_SPP</span>
+            </div>
+            <div class="text-[#86868b] text-xs px-3 py-1 rounded-full border border-[#3a3a3c]">
+                机器学习期末项目
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-x-6 text-[#86868b]">
+            <div id="slide-counter" class="font-mono text-sm tabular-nums">01 / 12</div>
+            <button onclick="toggleFullscreen()" 
+                    class="flex items-center gap-x-1.5 px-4 py-1.5 text-xs rounded-full border border-[#3a3a3c] hover:bg-[#1c1c1e] transition-colors">
+                <i class="fa-solid fa-expand mr-1"></i>
+                <span>全屏</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Slides Container -->
+    <div id="slides-container" class="relative w-full h-screen pt-16">
+        
+        <!-- SLIDE 1: Title -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-content max-w-5xl px-6 text-center">
+                <div class="mb-6">
+                    <span class="section-label tracking-[3px]">2026 机器学习期末大作业</span>
+                </div>
+                
+                <h1 class="hero-headline mx-auto leading-none tracking-tighter mb-6">
+                    学生成绩预测<br>与早期风险预警
+                </h1>
+                
+                <p class="subhead mx-auto mb-12">
+                    用机器学习发现学业失败的累积规律，<br>并构建真正可用的早期干预工具
+                </p>
+                
+                <div class="flex items-center justify-center gap-x-4 text-sm">
+                    <div class="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-[#86868b]">
+                        A · 数据与预处理 &nbsp;&nbsp; B · 模型训练 &nbsp;&nbsp; C · 评估与落地
+                    </div>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-12 text-[#86868b] text-xs flex items-center gap-x-2">
+                <div>按 <span class="font-mono px-1.5 py-0.5 bg-white/10 rounded">→</span> 或空格键继续</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: The Problem -->
+        <div class="slide" id="slide-2">
+            <div class="slide-content max-w-4xl px-6">
+                <div class="section-label mb-4">THE PROBLEM</div>
+                <h2 class="section-headline text-left tracking-tighter mb-8">
+                    学生挂科，<br>能否提前知道？
+                </h2>
+                
+                <div class="max-w-2xl">
+                    <p class="text-2xl leading-tight text-left text-[#a1a1a6]">
+                        学业失败很少是突然发生的。<br>
+                        它是一条轨迹——从 G1 到 G2，再到 G3。
+                    </p>
+                    
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                        <div class="minimal-card p-6 rounded-2xl">
+                            <div class="text-[#86868b] text-sm mb-1">传统做法</div>
+                            <div class="text-xl font-medium">等到 G3 出成绩后才发现问题</div>
+                        </div>
+                        <div class="minimal-card p-6 rounded-2xl border-[#0071e3]">
+                            <div class="text-[#86868b] text-sm mb-1">我们的目标</div>
+                            <div class="text-xl font-medium">在 G2 阶段就识别高风险学生</div>
+                        </div>
+                        <div class="minimal-card p-6 rounded-2xl">
+                            <div class="text-[#86868b] text-sm mb-1">价值</div>
+                            <div class="text-xl font-medium">给老师一个可行动的干预窗口</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: The Insight -->
+        <div class="slide" id="slide-3">
+            <div class="slide-content max-w-5xl px-6 text-center">
+                <div class="section-label mb-4">THE KEY INSIGHT</div>
+                
+                <div class="mb-6">
+                    <span class="text-2xl text-[#86868b]">最强的预测信号来自</span>
+                </div>
+                
+                <div class="stat-value mb-2">G2</div>
+                <div class="text-4xl font-medium tracking-tight mb-8">上一阶段成绩</div>
+                
+                <div class="flex justify-center">
+                    <div class="inline-flex items-baseline gap-x-2 bg-white/5 px-8 py-3 rounded-3xl border border-white/10">
+                        <span class="text-7xl font-semibold tabular-nums">0.905</span>
+                        <span class="text-2xl text-[#86868b]">相关系数</span>
+                    </div>
+                </div>
+                
+                <p class="mt-10 max-w-md mx-auto text-[#a1a1a6] text-xl leading-tight">
+                    G2 与最终成绩的相关性远超 G1、缺勤、父母教育、学习时间等所有其他变量。
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Data -->
+        <div class="slide" id="slide-4">
+            <div class="slide-content max-w-5xl px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-16 items-center">
+                    <div>
+                        <div class="section-label mb-3">DATA</div>
+                        <h2 class="section-headline text-left mb-6 tracking-tighter">UCI 学生成绩数据集</h2>
+                        
+                        <div class="space-y-6 text-left text-lg">
+                            <div class="flex gap-4">
+                                <div class="w-9 h-9 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-sm">395</div>
+                                <div>
+                                    <div class="font-medium">数学课程学生</div>
+                                    <div class="text-[#86868b]">33 项原始属性 · 无缺失值</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-9 h-9 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-sm">649</div>
+                                <div>
+                                    <div class="font-medium">葡萄牙语课程学生</div>
+                                    <div class="text-[#86868b]">用于跨课程泛化验证</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 lg:mt-0">
+                        <div class="minimal-card p-8 rounded-3xl">
+                            <div class="uppercase text-xs tracking-[2px] text-[#86868b] mb-4">核心发现</div>
+                            <div class="text-3xl leading-tight font-medium">
+                                学业成就具有<br>极强的路径依赖
+                            </div>
+                            <div class="mt-6 text-sm text-[#86868b]">
+                                G2 低 → G3 大概率低<br>
+                                这不是巧合，而是教育现实
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: A - Preprocessing -->
+        <div class="slide" id="slide-5">
+            <div class="slide-content max-w-5xl px-6">
+                <div class="flex items-center gap-x-3 mb-4">
+                    <span class="section-label">A · DATA ENGINEER</span>
+                </div>
+                <h2 class="section-headline text-left tracking-tighter mb-8">严谨的预处理<br>与可解释特征</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
+                    <div class="minimal-card p-7 rounded-3xl">
+                        <div class="font-semibold mb-3 flex items-center gap-x-2">
+                            <i class="fa-solid fa-shield-halved text-[#0071e3]"></i>
+                            <span>零数据泄露</span>
+                        </div>
+                        <div class="text-[#a1a1a6]">先 split，再在训练集上 fit 预处理。官方 Preprocessor 成为全项目单一事实来源。</div>
+                    </div>
+                    
+                    <div class="minimal-card p-7 rounded-3xl">
+                        <div class="font-semibold mb-3 flex items-center gap-x-2">
+                            <i class="fa-solid fa-lightbulb text-[#0071e3]"></i>
+                            <span>教育可解释特征工程</span>
+                        </div>
+                        <div class="text-[#a1a1a6]">
+                            grade_trend（近期趋势）<br>
+                            parent_edu · alc_total · study_fail_interact
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-sm text-[#86868b]">
+                    支持 mat + por 两个数据集 · 动态识别数值与类别特征 · 95% 分位数截断异常缺勤
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: B - Models -->
+        <div class="slide" id="slide-6">
+            <div class="slide-content max-w-5xl px-6">
+                <div class="flex items-center gap-x-3 mb-4">
+                    <span class="section-label">B · ALGORITHM ENGINEER</span>
+                </div>
+                <h2 class="section-headline text-left tracking-tighter mb-8">6 分类 + 6 回归<br>工厂化与调参</h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div class="minimal-card px-6 py-5 rounded-2xl text-left">
+                        <div class="text-sm text-[#86868b]">分类模型</div>
+                        <div class="mt-2 text-xl font-medium">Logistic · DT · RF<br>GradientBoosting · SVM · KNN</div>
+                    </div>
+                    <div class="minimal-card px-6 py-5 rounded-2xl text-left">
+                        <div class="text-sm text-[#86868b]">回归模型</div>
+                        <div class="mt-2 text-xl font-medium">Linear · Ridge · Lasso<br>DT · RF · GradientBoosting</div>
+                    </div>
+                    <div class="minimal-card px-6 py-5 rounded-2xl text-left col-span-2 md:col-span-1">
+                        <div class="text-sm text-[#86868b]">工程亮点</div>
+                        <div class="mt-2">完整 GridSearch<br>统一 Config 管理<br>随机种子严格控制</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Evaluation Protocol -->
+        <div class="slide" id="slide-7">
+            <div class="slide-content max-w-4xl px-6 text-left">
+                <div class="section-label mb-4">C · EVALUATION</div>
+                <h2 class="section-headline tracking-tighter mb-10">Unbiased 最终评估</h2>
+                
+                <div class="max-w-2xl space-y-8 text-xl">
+                    <div>
+                        <span class="font-medium">B 阶段</span> 用交叉验证选择与调优模型<br>
+                        <span class="font-medium">C 阶段</span> 用完全独立的 <span class="font-mono">79 人</span> hold-out 测试集报告最终性能
+                    </div>
+                    
+                    <div class="text-[#86868b] text-lg">
+                        这避免了模型选择偏差，让最终数字真正可信。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Results -->
+        <div class="slide" id="slide-8">
+            <div class="slide-content max-w-5xl px-6">
+                <div class="section-label mb-2">FINAL RESULTS (TEST SET)</div>
+                <h2 class="section-headline tracking-tighter mb-10">Random Forest 表现突出</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Classification -->
+                    <div class="minimal-card p-8 rounded-3xl text-left">
+                        <div class="uppercase tracking-widest text-xs text-[#86868b] mb-1">分类 · 是否通过</div>
+                        <div class="flex items-baseline gap-x-3">
+                            <span class="metric tabular-nums">0.911</span>
+                            <span class="text-2xl text-[#86868b]">准确率</span>
+                        </div>
+                        <div class="mt-1 text-[#0071e3] font-medium">AUC 0.952</div>
+                        <div class="mt-6 text-sm text-[#a1a1a6]">在从未见过的 79 名学生上，模型能可靠区分通过与挂科风险。</div>
+                    </div>
+                    
+                    <!-- Regression -->
+                    <div class="minimal-card p-8 rounded-3xl text-left">
+                        <div class="uppercase tracking-widest text-xs text-[#86868b] mb-1">回归 · G3 分数</div>
+                        <div class="flex items-baseline gap-x-3">
+                            <span class="metric tabular-nums">0.813</span>
+                            <span class="text-2xl text-[#86868b]">R²</span>
+                        </div>
+                        <div class="mt-1 text-[#0071e3] font-medium">RMSE 1.96</div>
+                        <div class="mt-6 text-sm text-[#a1a1a6]">强泛化能力。模型在测试集上捕捉到了真实的分数分布。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: G2 Baseline -->
+        <div class="slide" id="slide-9">
+            <div class="slide-content max-w-5xl px-6 text-left">
+                <div class="section-label mb-3">INNOVATION 01</div>
+                <h2 class="section-headline tracking-tighter mb-6">G2 基线实验</h2>
+                
+                <p class="max-w-2xl text-2xl leading-tight mb-10">我们把“仅用上一阶段成绩”做成了正式基线。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <div class="text-sm text-[#86868b]">仅 G2 基线</div>
+                        <div class="text-6xl font-semibold tabular-nums mt-1">0.791</div>
+                        <div class="text-sm text-[#86868b]">R²</div>
+                    </div>
+                    <div>
+                        <div class="text-sm text-[#86868b]">全特征 Random Forest</div>
+                        <div class="text-6xl font-semibold tabular-nums mt-1">0.813</div>
+                        <div class="text-sm text-[#86868b]">R²</div>
+                    </div>
+                    <div class="flex items-end">
+                        <div>
+                            <div class="text-sm text-[#0071e3]">LIFT</div>
+                            <div class="text-6xl font-semibold tabular-nums text-[#0071e3]">+0.023</div>
+                            <div class="text-sm mt-1">额外 40 个特征带来的边际提升</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10 max-w-md text-[#a1a1a6]">
+                    这个数字本身就是最有力的教育洞见：<strong class="text-white">历史成绩几乎决定未来。</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Cross Subject -->
+        <div class="slide" id="slide-10">
+            <div class="slide-content max-w-5xl px-6">
+                <div class="section-label mb-3">INNOVATION 02</div>
+                <h2 class="section-headline tracking-tighter mb-8">跨课程泛化验证</h2>
+                
+                <div class="flex flex-col lg:flex-row items-center gap-x-10 gap-y-8">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-x-4 text-3xl font-medium mb-4">
+                            <div class="px-6 py-2 bg-white/5 rounded-2xl">Math</div>
+                            <i class="fa-solid fa-arrow-right text-[#0071e3]"></i>
+                            <div class="px-6 py-2 bg-white/5 rounded-2xl">Portuguese</div>
+                        </div>
+                        
+                        <div class="text-2xl">mat 训练的模型<br>直接在 por 649 人上测试</div>
+                    </div>
+                    
+                    <div>
+                        <div class="text-8xl font-semibold tabular-nums text-white">0.773</div>
+                        <div class="text-[#86868b] -mt-2">R² 仍保持稳健</div>
+                    </div>
+                </div>
+                
+                <div class="mt-10 max-w-lg text-[#a1a1a6]">
+                    这证明 G2 路径依赖不是数学课特有的现象，而是学业风险的通用规律。
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: The Tool -->
+        <div class="slide" id="slide-11">
+            <div class="slide-content max-w-5xl px-6 text-left">
+                <div class="section-label mb-3">DELIVERABLE</div>
+                <h2 class="section-headline tracking-tighter mb-4">StudentRiskPredictor</h2>
+                <p class="text-2xl max-w-xl mb-8">从研究成果到真正能用的工具</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="minimal-card p-6 rounded-3xl">
+                        <div class="text-[#0071e3] text-sm mb-2">一键加载</div>
+                        <div class="font-medium">同一 Preprocessor + 冠军模型</div>
+                    </div>
+                    <div class="minimal-card p-6 rounded-3xl">
+                        <div class="text-[#0071e3] text-sm mb-2">实时输出</div>
+                        <div class="font-medium">通过概率 · 预测 G3 · Top 驱动因素</div>
+                    </div>
+                    <div class="minimal-card p-6 rounded-3xl">
+                        <div class="text-[#0071e3] text-sm mb-2">What-If 模拟</div>
+                        <div class="font-medium">输入干预假设，立即看到预期变化</div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <button onclick="goToSlide(12)" 
+                            class="keynote-button text-base px-8 py-3.5">
+                        <span>进入交互演示</span>
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                    <span class="ml-4 text-[#86868b] text-sm">或在终端运行 <span class="font-mono bg-white/10 px-2 py-px rounded">python -m src.predict</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: Interactive Demo -->
+        <div class="slide" id="slide-12">
+            <div class="slide-content max-w-6xl px-6 w-full">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <div class="section-label">LIVE SIMULATION</div>
+                        <h3 class="text-4xl font-semibold tracking-tight">交互式风险预测器</h3>
+                    </div>
+                    <div class="text-right text-xs text-[#86868b]">
+                        基于真实模型行为近似<br>
+                        实际使用请运行终端命令
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <!-- Controls -->
+                    <div class="lg:col-span-2 minimal-card p-7 rounded-3xl">
+                        <div class="space-y-6">
+                            <!-- G2 -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5">
+                                    <span>G2（上一阶段成绩）</span>
+                                    <span id="g2-val" class="font-mono tabular-nums">9</span>
+                                </div>
+                                <input type="range" id="g2" min="0" max="20" value="9" step="1" 
+                                       class="w-full accent-[#0071e3]" oninput="updatePrediction()">
+                            </div>
+                            
+                            <!-- Absences -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5">
+                                    <span>缺勤次数</span>
+                                    <span id="abs-val" class="font-mono tabular-nums">10</span>
+                                </div>
+                                <input type="range" id="absences" min="0" max="30" value="10" step="1" 
+                                       class="w-full accent-[#0071e3]" oninput="updatePrediction()">
+                            </div>
+                            
+                            <!-- Failures -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5">
+                                    <span>历史挂科次数</span>
+                                    <span id="fail-val" class="font-mono tabular-nums">0</span>
+                                </div>
+                                <input type="range" id="failures" min="0" max="3" value="0" step="1" 
+                                       class="w-full accent-[#0071e3]" oninput="updatePrediction()">
+                            </div>
+                            
+                            <!-- Studytime -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5">
+                                    <span>每周学习时间（1-4）</span>
+                                    <span id="study-val" class="font-mono tabular-nums">2</span>
+                                </div>
+                                <input type="range" id="studytime" min="1" max="4" value="2" step="1" 
+                                       class="w-full accent-[#0071e3]" oninput="updatePrediction()">
+                            </div>
+                        </div>
+                        
+                        <button onclick="simulateIntervention()" 
+                                class="mt-8 w-full py-3 text-sm rounded-2xl border border-[#3a3a3c] hover:bg-white/5 transition-colors">
+                            模拟干预：减少缺勤 + 增加学习时间
+                        </button>
+                    </div>
+                    
+                    <!-- Output -->
+                    <div class="lg:col-span-3 minimal-card p-7 rounded-3xl flex flex-col">
+                        <div class="flex-1">
+                            <div class="text-sm text-[#86868b] mb-2">预测结果</div>
+                            
+                            <div class="flex gap-x-6 items-end">
+                                <div>
+                                    <div class="text-[#86868b] text-xs">通过概率</div>
+                                    <div id="pass-prob" class="text-7xl font-semibold tabular-nums leading-none mt-1">51</div>
+                                    <div class="text-sm -mt-1 text-[#86868b]">%</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="text-[#86868b] text-xs">预测 G3</div>
+                                    <div id="pred-g3" class="text-7xl font-semibold tabular-nums leading-none mt-1">9.8</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <div class="text-xs text-[#86868b] mb-1">主要驱动因素</div>
+                                <div id="top-factors" class="text-sm font-medium text-[#f5f5f7]">
+                                    G2（主导） · 缺勤 · 历史失败
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="intervention-result" class="hidden mt-5 pt-5 border-t border-white/10 text-sm">
+                            <div class="text-[#86868b]">干预后预期 G3</div>
+                            <div class="flex items-baseline gap-x-3">
+                                <span id="new-g3" class="text-3xl font-semibold tabular-nums"></span>
+                                <span id="lift" class="text-sm font-medium"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: Summary -->
+        <div class="slide" id="slide-13">
+            <div class="slide-content max-w-4xl px-6">
+                <h2 class="section-headline tracking-tighter mb-10 text-left">我们证明了什么</h2>
+                
+                <div class="space-y-5 text-left text-xl">
+                    <div class="flex gap-x-4">
+                        <span class="font-mono text-[#0071e3] w-6">01</span>
+                        <span>学业失败是高度累积的，G2 是最强信号。</span>
+                    </div>
+                    <div class="flex gap-x-4">
+                        <span class="font-mono text-[#0071e3] w-6">02</span>
+                        <span>我们用基线实验把它量化了（lift 仅 0.023）。</span>
+                    </div>
+                    <div class="flex gap-x-4">
+                        <span class="font-mono text-[#0071e3] w-6">03</span>
+                        <span>跨课程验证了它的通用性。</span>
+                    </div>
+                    <div class="flex gap-x-4">
+                        <span class="font-mono text-[#0071e3] w-6">04</span>
+                        <span>我们交付了一个老师真正能用的预测 + 模拟工具。</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: Thank You -->
+        <div class="slide" id="slide-14">
+            <div class="slide-content text-center max-w-xl px-6">
+                <h2 class="text-6xl font-semibold tracking-tighter mb-4">谢谢</h2>
+                <p class="text-xl text-[#86868b] mb-12">欢迎提问</p>
+                
+                <div class="text-sm text-[#86868b]">
+                    2026_ML_SPP · A / B / C 分工协作<br>
+                    <span class="font-mono text-xs mt-4 block">代码与文档已完整开源</span>
+                </div>
+                
+                <div class="mt-8 text-xs text-[#86868b]">
+                    按 Esc 退出 · 方向键切换
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="fixed bottom-0 left-0 right-0 flex justify-between items-center px-8 pb-6 z-40 pointer-events-none">
+        <div class="pointer-events-auto flex gap-x-2">
+            <button onclick="prevSlide()" 
+                    class="px-5 py-2.5 text-sm bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center gap-x-2 transition-colors">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="hidden sm:inline">上一个</span>
+            </button>
+            <button onclick="nextSlide()" 
+                    class="px-5 py-2.5 text-sm bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center gap-x-2 transition-colors">
+                <span class="hidden sm:inline">下一个</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <div class="pointer-events-auto">
+            <button onclick="runRealDemoHint()" 
+                    class="px-5 py-2 text-xs bg-[#1c1c1e] hover:bg-[#2c2c2e] border border-white/10 text-[#86868b] rounded-2xl flex items-center gap-x-2 transition-colors">
+                <i class="fa-solid fa-terminal"></i>
+                <span>在终端运行真实 Demo</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#0071e3');
+        }
+        
+        let currentSlide = 1;
+        const totalSlides = 14;
+        
+        function updateSlideCounter() {
+            const counter = document.getElementById('slide-counter');
+            counter.textContent = String(currentSlide).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
+        }
+        
+        function showSlide(n) {
+            // Hide all
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+                slide.style.display = 'none';
+            });
+            
+            // Show target
+            const target = document.getElementById('slide-' + n);
+            if (target) {
+                target.style.display = 'flex';
+                target.classList.add('active');
+            }
+            
+            currentSlide = n;
+            updateSlideCounter();
+            
+            // Special init for interactive slide
+            if (n === 12) {
+                setTimeout(() => {
+                    const g2 = document.getElementById('g2');
+                    if (g2) updatePrediction();
+                }, 80);
+            }
+        }
+        
+        function nextSlide() {
+            let next = currentSlide + 1;
+            if (next > totalSlides) next = totalSlides;
+            showSlide(next);
+        }
+        
+        function prevSlide() {
+            let prev = currentSlide - 1;
+            if (prev < 1) prev = 1;
+            showSlide(prev);
+        }
+        
+        function goToSlide(n) {
+            showSlide(n);
+        }
+        
+        // Keyboard navigation (very Apple-like)
+        function setupKeyboard() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    nextSlide();
+                } 
+                else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevSlide();
+                } 
+                else if (e.key.toLowerCase() === 'f') {
+                    toggleFullscreen();
+                } 
+                else if (e.key === 'Escape') {
+                    // Exit fullscreen if in it, or go to last slide
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                    } else {
+                        showSlide(totalSlides);
+                    }
+                }
+            });
+            
+            // Also allow clicking anywhere on slide to advance (except interactive)
+            document.getElementById('slides-container').addEventListener('click', function(e) {
+                const interactive = document.getElementById('slide-12');
+                if (interactive && interactive.classList.contains('active')) {
+                    // Do nothing on interactive slide to allow slider interaction
+                    return;
+                }
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+                nextSlide();
+            });
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        // Interactive Predictor (faithful mock based on real model behavior)
+        function updatePrediction() {
+            const g2 = parseInt(document.getElementById('g2').value);
+            const absences = parseInt(document.getElementById('absences').value);
+            const failures = parseInt(document.getElementById('failures').value);
+            const studytime = parseInt(document.getElementById('studytime').value);
+            
+            // Update labels
+            document.getElementById('g2-val').textContent = g2;
+            document.getElementById('abs-val').textContent = absences;
+            document.getElementById('fail-val').textContent = failures;
+            document.getElementById('study-val').textContent = studytime;
+            
+            // Approximate the real model (G2 has overwhelming weight)
+            // Tuned to roughly match observed outputs
+            let baseG3 = (g2 * 0.82) 
+                       + ((20 - absences) * 0.09) 
+                       - (failures * 1.1) 
+                       + (studytime * 0.55) 
+                       + 1.8;
+            
+            // Add slight non-linearity for G2 low values
+            if (g2 <= 8) baseG3 -= (8 - g2) * 0.35;
+            
+            baseG3 = Math.max(0, Math.min(20, baseG3));
+            
+            // Pass probability (sigmoid around 10)
+            const z = (baseG3 - 10) * 0.85;
+            let passProb = 1 / (1 + Math.exp(-z));
+            passProb = Math.max(0.03, Math.min(0.99, passProb));
+            
+            // Update DOM
+            document.getElementById('pred-g3').textContent = baseG3.toFixed(1);
+            document.getElementById('pass-prob').textContent = Math.round(passProb * 100);
+            
+            // Factors (G2 always dominates)
+            let factors = 'G2（主导）';
+            if (absences > 8) factors += ' · 缺勤';
+            if (failures > 0) factors += ' · 历史失败';
+            document.getElementById('top-factors').innerHTML = factors;
+            
+            // Hide previous intervention result
+            document.getElementById('intervention-result').classList.add('hidden');
+        }
+        
+        function simulateIntervention() {
+            const g2 = parseInt(document.getElementById('g2').value);
+            const absences = parseInt(document.getElementById('absences').value);
+            const failures = parseInt(document.getElementById('failures').value);
+            const studytime = parseInt(document.getElementById('studytime').value);
+            
+            // Simulate improved scenario
+            const newAbsences = Math.max(0, absences - 6);
+            const newStudytime = Math.min(4, studytime + 1);
+            
+            // Recompute with intervened values
+            let baseG3 = (g2 * 0.82) 
+                       + ((20 - newAbsences) * 0.09) 
+                       - (failures * 1.1) 
+                       + (newStudytime * 0.55) 
+                       + 1.8;
+            
+            if (g2 <= 8) baseG3 -= (8 - g2) * 0.35;
+            baseG3 = Math.max(0, Math.min(20, baseG3));
+            
+            const origG3 = parseFloat(document.getElementById('pred-g3').textContent);
+            const lift = (baseG3 - origG3);
+            
+            // Show result
+            const resultBox = document.getElementById('intervention-result');
+            document.getElementById('new-g3').textContent = baseG3.toFixed(1);
+            
+            const liftEl = document.getElementById('lift');
+            if (lift > 0.1) {
+                liftEl.innerHTML = `+${lift.toFixed(1)} <span class="text-emerald-400">↑</span>`;
+                liftEl.style.color = '#4ade80';
+            } else if (lift < -0.1) {
+                liftEl.innerHTML = `${lift.toFixed(1)} <span class="text-amber-400">↓</span>`;
+                liftEl.style.color = '#fbbf24';
+            } else {
+                liftEl.innerHTML = `变化极小 <span class="text-[#86868b]">≈</span>`;
+                liftEl.style.color = '#86868b';
+            }
+            
+            resultBox.classList.remove('hidden');
+            
+            // Educational narration hint
+            if (g2 < 10 && Math.abs(lift) < 0.5) {
+                setTimeout(() => {
+                    if (!resultBox.classList.contains('hidden')) {
+                        resultBox.innerHTML += `<div class="mt-3 text-[10px] text-[#86868b] leading-tight">当 G2 已偏低时，单纯后期干预空间有限。这正是“早期干预”的意义。</div>`;
+                    }
+                }, 1200);
+            }
+        }
+        
+        function runRealDemoHint() {
+            const hint = document.createElement('div');
+            hint.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-[#1c1c1e] border border-white/10 text-white px-6 py-4 rounded-2xl text-sm shadow-2xl flex items-center gap-x-4 z-[100]';
+            hint.innerHTML = `
+                <div>
+                    <div class="font-medium">真实命令（推荐在终端运行）：</div>
+                    <div class="font-mono mt-1 text-[#0071e3]">python -m src.predict</div>
+                </div>
+                <button class="text-xs px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl" onclick="this.parentElement.remove()">知道了</button>
+            `;
+            document.body.appendChild(hint);
+            
+            setTimeout(() => {
+                if (hint.parentElement) hint.remove();
+            }, 6500);
+        }
+        
+        function initializeInteractive() {
+            // Set initial values and bind
+            const sliders = ['g2', 'absences', 'failures', 'studytime'];
+            sliders.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', updatePrediction);
+                }
+            });
+            
+            // Initialize with good default (borderline case)
+            setTimeout(() => {
+                const g2El = document.getElementById('g2');
+                if (g2El) {
+                    g2El.value = 9;
+                    updatePrediction();
+                }
+            }, 200);
+        }
+        
+        function initializePresentation() {
+            initializeTailwind();
+            
+            // Show first slide
+            showSlide(1);
+            
+            // Keyboard
+            setupKeyboard();
+            
+            // Interactive demo init
+            initializeInteractive();
+            
+            // Subtle auto-advance hint on first slide (disappears after interaction)
+            setTimeout(() => {
+                const first = document.getElementById('slide-1');
+                if (first && first.classList.contains('active')) {
+                    const hint = first.querySelector('.absolute.bottom-12');
+                    if (hint) {
+                        hint.style.transition = 'opacity 800ms';
+                        hint.style.opacity = '0.3';
+                    }
+                }
+            }, 6500);
+            
+            // Make sure body doesn't scroll
+            document.body.style.overflow = 'hidden';
+            
+            // Optional: start with a very subtle animation on load
+            setTimeout(() => {
+                const active = document.querySelector('.slide.active');
+                if (active) active.style.opacity = '1';
+            }, 80);
+            
+            // Easter egg: press "d" to jump to demo
+            document.addEventListener('keydown', function(e) {
+                if (e.key.toLowerCase() === 'd' && currentSlide !== 12) {
+                    showSlide(12);
+                }
+            });
+            
+            console.log('%c[2026_ML_SPP] Apple-style Keynote presentation initialized. Use arrow keys / space.', 'color:#555');
+        }
+        
+        // Boot
+        window.onload = initializePresentation;
+        
+        // Expose a couple helpers for presenter
+        window.goTo = goToSlide;
+        window.next = nextSlide;
+    </script>
+</body>
+</html>
